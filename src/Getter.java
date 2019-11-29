@@ -71,7 +71,7 @@ public class Getter extends JFrame {
             if (got == null)
                 outString.setText("No object found");
             else
-                outString.setText(got.username);
+                outString.setText(got.password);
         } catch (Exception e) {
             e.printStackTrace();
         }
