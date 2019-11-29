@@ -1,3 +1,5 @@
+package security;
+
 import net.jini.core.discovery.LookupLocator;
 import net.jini.core.lookup.ServiceRegistrar;
 import net.jini.core.lookup.ServiceTemplate;
@@ -29,7 +31,7 @@ public class SpaceUtils {
     }
 
     public static JavaSpace getSpace() {
-        return getSpace("localhost");
+        return getSpace("waterloo");
     }
 
 
@@ -56,7 +58,7 @@ public class SpaceUtils {
     }
 
     public static TransactionManager getManager() {
-        return getManager("localhost");
+        return getManager("waterloo");
     }
 }
 
