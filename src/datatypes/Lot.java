@@ -1,3 +1,7 @@
+package datatypes;
+
+import datatypes.Bid;
+import datatypes.User;
 import net.jini.core.entry.*;
 import java.util.ArrayList;
 

@@ -1,4 +1,8 @@
+package user_interface;
+
+import datatypes.User;
 import net.jini.space.JavaSpace;
+import security.SpaceUtils;
 
 import javax.swing.*;
 import java.awt.*;
@@ -21,7 +25,7 @@ public class Getter extends JFrame {
     }
 
     private void initComponents() {
-        setTitle("JavaSpaces Getter");
+        setTitle("JavaSpaces user_interface.Getter");
         addWindowListener (new java.awt.event.WindowAdapter () {
             public void windowClosing (java.awt.event.WindowEvent evt) {
                 exitForm (evt);

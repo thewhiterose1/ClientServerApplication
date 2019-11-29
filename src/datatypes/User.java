@@ -1,3 +1,5 @@
+package datatypes;
+
 import net.jini.core.entry.Entry;
 
 import java.security.MessageDigest;
