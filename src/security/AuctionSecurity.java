@@ -3,7 +3,7 @@ package security;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
-public class SecurityManager {
+public class AuctionSecurity {
 
     /**
      * Hash function for storing passwords
@@ -28,9 +28,10 @@ public class SecurityManager {
         return hash.toString();
     }
 
-    public static void login(String username, String passwordAttempt) {
+    public static boolean login(String username, String passwordAttempt) {
         // Hash the attempted password ready for comparison
         passwordAttempt = hashPassword(passwordAttempt);
+        return true;
     }
 
     public static boolean validateUsername(String username) {

@@ -1,7 +1,7 @@
 package datatypes;
 
 import net.jini.core.entry.Entry;
-import security.SecurityManager;
+import security.AuctionSecurity;
 
 public class User implements Entry {
 
@@ -14,15 +14,15 @@ public class User implements Entry {
 
     public User(String username, String password) {
         // Check username is valid
-        if (SecurityManager.validateUsername(username)) {
+        if (AuctionSecurity.validateUsername(username)) {
             this.username = username;
         }
         else {
 
         }
         // Check password is valid
-        if (SecurityManager.validatePassword(password)) {
-            this.password = SecurityManager.hashPassword(password);
+        if (AuctionSecurity.validatePassword(password)) {
+            this.password = AuctionSecurity.hashPassword(password);
         }
     }
 }

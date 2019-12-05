@@ -1,51 +1,52 @@
 import javax.swing.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.CardLayout;
 
-public class AuctionSystem {
-
-    // Implementation of singleton design pattern
-    public static AuctionSystem app;
-    public static JFrame appFrame;
+public class AuctionSystem extends JFrame{
 
     private JPanel contentDisplay;
-    private JButton login;
-    private JButton register;
+    private JPanel mainScreen;
 
+    // Implementation of singleton design pattern for reference to main JFrame across application
+    private static AuctionSystem app;
     public static void main (String[] args) {
         app = new AuctionSystem();
     }
 
     public AuctionSystem() {
         // Initialisation of swing frame
-        appFrame = new JFrame("Auction System");
-        appFrame.setContentPane(this.contentDisplay);
-        appFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        appFrame.pack();
-        appFrame.setVisible(true);
-        appFrame.setSize(500, 400);
+        this.setTitle("AuctionSystem");
+        this.setContentPane(this.contentDisplay);
+        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.pack();
+        this.setVisible(true);
+        this.setSize(500, 400);
 
+        // Utilisation of CardLayout
+        contentDisplay.add(mainScreen, "MainScreen");
+        contentDisplay.add(new LoginUI().getPanel(), "LoginScreen");
+        contentDisplay.add(new AuctionHubUI().getPanel(), "AuctionHub" );
 
-        login.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent actionEvent) {
-                login();
-            }
-        });
-        register.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent actionEvent) {
-                register();
-            }
-        });
-    }
+        // Direct the user to main screen upon application startup
+        changePanel("LoginScreen");
 
-    public void login() {
-        contentDisplay = new LoginUI();
-    }
-
-    public void register() {
+        // Initial setup
 
     }
 
+    // Changes the JPanel currently active on the CardLayout
+    public void changePanel(String changeTo) {
+        ((CardLayout) contentDisplay.getLayout()).show(contentDisplay, changeTo);
+    }
+
+    /*
+    * Getters
+    */
+
+    public JPanel getContentDisplay() {
+        return this.contentDisplay;
+    }
+
+    public static AuctionSystem getAuctionSystem() {
+        return app;
+    }
 }
