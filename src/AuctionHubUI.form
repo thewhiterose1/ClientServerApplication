@@ -42,12 +42,6 @@
               <text value="New Lot"/>
             </properties>
           </component>
-          <component id="38eca" class="javax.swing.JButton" binding="exitButton" default-binding="true">
-            <constraints/>
-            <properties>
-              <text value="Exit"/>
-            </properties>
-          </component>
         </children>
       </grid>
     </children>

@@ -6,6 +6,9 @@ public class AuctionSystem extends JFrame{
     private JPanel contentDisplay;
     private JPanel mainScreen;
 
+    // Local test data initialisation
+    public static TestData myData = new TestData();
+
     // Implementation of singleton design pattern for reference to main JFrame across application
     private static AuctionSystem app;
     public static void main (String[] args) {
@@ -21,15 +24,13 @@ public class AuctionSystem extends JFrame{
         this.setVisible(true);
         this.setSize(500, 400);
 
-        // Utilisation of CardLayout
+        // Implementation of CardLayout for controlling navigation within the application
         contentDisplay.add(mainScreen, "MainScreen");
         contentDisplay.add(new LoginUI().getPanel(), "LoginScreen");
         contentDisplay.add(new AuctionHubUI().getPanel(), "AuctionHub" );
 
         // Direct the user to main screen upon application startup
         changePanel("LoginScreen");
-
-        // Initial setup
 
     }
 
