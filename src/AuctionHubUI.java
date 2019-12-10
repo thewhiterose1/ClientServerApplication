@@ -4,20 +4,23 @@ import javax.swing.*;
 import java.awt.event.*;
 import java.util.ArrayList;
 
-public class AuctionHubUI {
-    private JPanel auctionHub;
+public class AuctionHubUI extends AuctionUI {
+    private JPanel auctionHubScreen;
     private JPanel hubOptions;
-    private JButton newLot;
+    private JButton newLotButton;
     private JList lotList;
 
     private ArrayList<Lot> allLots;
 
     public AuctionHubUI() {
+        // Variable initialisation
+        this.interfacePanel = auctionHubScreen;
+
         // Populate the JList representing active lots within the system
         DefaultListModel<Lot> model = new DefaultListModel<>();
         lotList.setModel(model);
-        model.addElement(AuctionSystem.myData.lot1);
-        model.addElement(AuctionSystem.myData.lot2);
+        model.addElement(AuctionSystem.myData.lots.get(0));
+        model.addElement(AuctionSystem.myData.lots.get(1));
 
         // When the user clicks on a given lot, redirect them to the details page for the selected lot
         lotList.addMouseListener(new MouseAdapter() {
@@ -25,15 +28,16 @@ public class AuctionHubUI {
             public void mouseClicked(MouseEvent e) {
                 super.mouseClicked(e);
                 Lot selected = (Lot) lotList.getSelectedValue();
-                System.out.println(selected.buyNowPrice);
+                AuctionSystem.getAuctionSystem().getContentDisplay().add(new ViewLotUI(selected).getPanel(), "ViewSelectedLot");
+                AuctionSystem.getAuctionSystem().changePanel("ViewSelectedLot");
             }
         });
 
         // Go to NewLot creation screen
-        newLot.addActionListener(new ActionListener() {
+        newLotButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                System.exit(0);
+                AuctionSystem.getAuctionSystem().changePanel("NewLot");
             }
         });
     }
@@ -41,9 +45,5 @@ public class AuctionHubUI {
     // By utilising notifications, refresh lots list when new one is added by another user
     public void refreshList() {
 
-    }
-
-    public JPanel getPanel() {
-        return auctionHub;
     }
 }

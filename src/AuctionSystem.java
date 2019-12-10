@@ -1,13 +1,15 @@
+import datatypes.*;
 import javax.swing.*;
 import java.awt.CardLayout;
 
-public class AuctionSystem extends JFrame{
-
-    private JPanel contentDisplay;
-    private JPanel mainScreen;
+public class AuctionSystem extends JFrame {
 
     // Local test data initialisation
     public static TestData myData = new TestData();
+    private User userSession;
+
+    private JPanel contentDisplay;
+    private JPanel mainScreen;
 
     // Implementation of singleton design pattern for reference to main JFrame across application
     private static AuctionSystem app;
@@ -17,7 +19,7 @@ public class AuctionSystem extends JFrame{
 
     public AuctionSystem() {
         // Initialisation of swing frame
-        this.setTitle("AuctionSystem");
+        this.setTitle("Auction Application");
         this.setContentPane(this.contentDisplay);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.pack();
@@ -28,6 +30,7 @@ public class AuctionSystem extends JFrame{
         contentDisplay.add(mainScreen, "MainScreen");
         contentDisplay.add(new LoginUI().getPanel(), "LoginScreen");
         contentDisplay.add(new AuctionHubUI().getPanel(), "AuctionHub" );
+        contentDisplay.add(new NewLotUI().getPanel(), "NewLot");
 
         // Direct the user to main screen upon application startup
         changePanel("LoginScreen");
@@ -40,12 +43,22 @@ public class AuctionSystem extends JFrame{
     }
 
     /*
+    * Setters
+    */
+
+    public void setUserSession(User user) {
+        this.userSession = user;
+    }
+
+    /*
     * Getters
     */
 
     public JPanel getContentDisplay() {
         return this.contentDisplay;
     }
+
+    public User getUserSession() { return this.userSession; }
 
     public static AuctionSystem getAuctionSystem() {
         return app;
