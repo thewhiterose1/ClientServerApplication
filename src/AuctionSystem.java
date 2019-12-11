@@ -1,11 +1,25 @@
 import datatypes.*;
+import net.jini.core.transaction.TransactionException;
+
 import javax.swing.*;
 import java.awt.CardLayout;
+import java.rmi.RemoteException;
 
 public class AuctionSystem extends JFrame {
 
     // Local test data initialisation
-    public static TestData myData = new TestData();
+    public static TestData myData;
+
+    static {
+        try {
+            myData = new TestData();
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        } catch (TransactionException e) {
+            e.printStackTrace();
+        }
+    }
+
     private User userSession;
 
     private JPanel contentDisplay;

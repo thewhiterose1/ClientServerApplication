@@ -8,6 +8,11 @@ public class AuctionUI {
 
     protected JPanel interfacePanel;
     protected AuctionSystem auctionSystem;
+    protected LotManager lotManager;
+
+    public AuctionUI() {
+        lotManager = new LotManager();
+    }
 
     /**
      * Returns the main JPanel container of the current screen

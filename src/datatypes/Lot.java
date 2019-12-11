@@ -8,13 +8,13 @@ public class Lot implements Entry {
     public User seller;
     public String name, desc;
     public ArrayList<Bid> bids;
-    public float buyNowPrice;
+    public Float buyNowPrice;
 
     public Lot() {
 
     }
 
-    public Lot(User seller, String name, String desc, float buyNowPrice) {
+    public Lot(User seller, String name, String desc, Float buyNowPrice) {
         this.seller = seller;
         this.name = name;
         this.desc = desc;

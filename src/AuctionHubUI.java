@@ -9,18 +9,15 @@ public class AuctionHubUI extends AuctionUI {
     private JPanel hubOptions;
     private JButton newLotButton;
     private JList lotList;
+    private JButton lotManagerButton;
+    private JButton refreshButton;
 
     private ArrayList<Lot> allLots;
 
     public AuctionHubUI() {
         // Variable initialisation
         this.interfacePanel = auctionHubScreen;
-
-        // Populate the JList representing active lots within the system
-        DefaultListModel<Lot> model = new DefaultListModel<>();
-        lotList.setModel(model);
-        model.addElement(AuctionSystem.myData.lots.get(0));
-        model.addElement(AuctionSystem.myData.lots.get(1));
+        refreshList();
 
         // When the user clicks on a given lot, redirect them to the details page for the selected lot
         lotList.addMouseListener(new MouseAdapter() {
@@ -40,10 +37,26 @@ public class AuctionHubUI extends AuctionUI {
                 AuctionSystem.getAuctionSystem().changePanel("NewLot");
             }
         });
+
+        // Manual refresh button for JList representing Lot objects
+        refreshButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                refreshList();
+            }
+        });
     }
 
-    // By utilising notifications, refresh lots list when new one is added by another user
+    /**
+     * By utilising notifications, refresh lots list when new one is added by another user
+      */
     public void refreshList() {
-
+        // Populate the JList representing active lots within the system
+        DefaultListModel<Lot> model = new DefaultListModel<>();
+        lotList.setModel(model);
+        allLots = lotManager.getAllLots();
+        for (Lot ele : allLots) {
+            model.addElement(ele);
+        }
     }
 }
