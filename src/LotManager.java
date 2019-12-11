@@ -7,8 +7,8 @@ import net.jini.space.JavaSpace;
 import net.jini.space.JavaSpace05;
 import security.SpaceUtils;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.Collection;
 
 public class LotManager {
 
@@ -16,7 +16,6 @@ public class LotManager {
     private TransactionManager mgr;
     private final int ONE_MINUTE = 60 * 1000;
     private final int FIVE_SECONDS = 5 * 1000;
-    private final int MAX_LOTS = 100;
 
     public LotManager() {
         // JavaSpace initialisation
@@ -42,9 +41,6 @@ public class LotManager {
         // List to be returned representing all Lot objects
         ArrayList<Lot> lotList = new ArrayList<>();
         Lot template = new Lot();
-        // Collection of Lot templates to allow returning of multiple Lot objects
-        Collection<Lot> templates = new ArrayList<>();
-        templates.add(new Lot());
 
         try {
             // Creation of transaction object
@@ -68,6 +64,39 @@ public class LotManager {
             e.printStackTrace();
         }
         return lotList;
+    }
+
+    /**
+     * Makes a bid on a Lot object
+     */
+    public Lot makeBid(User user, Float bidPrice, Lot lot) {
+        Lot template = lot;
+        try {
+            Lot got = (Lot) space.take(template, null, FIVE_SECONDS);
+            got.addBid(new Bid(user, bidPrice));
+            space.write(got, null, ONE_MINUTE);
+            return got;
+        } catch ( Exception e) {
+            e.printStackTrace();
+            return lot;
+        }
+    }
+
+    /**
+     * Returns all bid objects
+     * @param lot object you are returning the bids of
+     * @return ArrayList of Bid objects for particular lot
+     */
+    public ArrayList<Bid> getBids(Lot lot) {
+        Lot template = lot;
+        try {
+            Lot got = (Lot) space.read(template, null, JavaSpace.NO_WAIT);
+            System.out.println(got);
+            return got.bids;
+        } catch ( Exception e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     /**

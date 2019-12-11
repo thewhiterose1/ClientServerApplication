@@ -10,4 +10,13 @@ public class Bid implements Entry {
     public Bid() {
 
     }
+
+    public Bid(User buyer, Float bidPrice) {
+        this.bidPrice = bidPrice;
+        this.user = buyer;
+    }
+
+    public String toString() {
+        return "User: " + this.user.username + ". Bid Amount: " + this.bidPrice;
+    }
 }

@@ -2,7 +2,7 @@ import javax.swing.*;
 
 /**
  * Super class for all screens within system
- * Implements functionality common to all interfaces
+ * Implements functionality common to all user interfaces
  */
 public class AuctionUI {
 

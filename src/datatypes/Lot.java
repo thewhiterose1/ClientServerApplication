@@ -19,10 +19,11 @@ public class Lot implements Entry {
         this.name = name;
         this.desc = desc;
         this.buyNowPrice = buyNowPrice;
+        this.bids = new ArrayList<>();
     }
 
-    public void addBid() {
-
+    public void addBid(Bid newBid) {
+        bids.add(newBid);
     }
 
     // Override method toString, primarily for representing lot objects on the JList for displaying all lots

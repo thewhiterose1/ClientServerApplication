@@ -8,7 +8,7 @@ public class AuctionHubUI extends AuctionUI {
     private JPanel auctionHubScreen;
     private JPanel hubOptions;
     private JButton newLotButton;
-    private JList lotList;
+    private JList lotJList;
     private JButton lotManagerButton;
     private JButton refreshButton;
 
@@ -20,11 +20,11 @@ public class AuctionHubUI extends AuctionUI {
         refreshList();
 
         // When the user clicks on a given lot, redirect them to the details page for the selected lot
-        lotList.addMouseListener(new MouseAdapter() {
+        lotJList.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 super.mouseClicked(e);
-                Lot selected = (Lot) lotList.getSelectedValue();
+                Lot selected = (Lot) lotJList.getSelectedValue();
                 AuctionSystem.getAuctionSystem().getContentDisplay().add(new ViewLotUI(selected).getPanel(), "ViewSelectedLot");
                 AuctionSystem.getAuctionSystem().changePanel("ViewSelectedLot");
             }
@@ -53,7 +53,7 @@ public class AuctionHubUI extends AuctionUI {
     public void refreshList() {
         // Populate the JList representing active lots within the system
         DefaultListModel<Lot> model = new DefaultListModel<>();
-        lotList.setModel(model);
+        lotJList.setModel(model);
         allLots = lotManager.getAllLots();
         for (Lot ele : allLots) {
             model.addElement(ele);

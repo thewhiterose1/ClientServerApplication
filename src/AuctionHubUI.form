@@ -23,7 +23,7 @@
         <properties/>
         <border type="none"/>
         <children>
-          <component id="746a9" class="javax.swing.JList" binding="lotList">
+          <component id="746a9" class="javax.swing.JList" binding="lotJList">
             <constraints/>
             <properties/>
           </component>
