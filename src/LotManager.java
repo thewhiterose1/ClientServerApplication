@@ -1,5 +1,7 @@
-import datatypes.*;
-
+import datatypes.Bid;
+import datatypes.Lot;
+import datatypes.User;
+import net.jini.core.event.RemoteEventListener;
 import net.jini.core.transaction.Transaction;
 import net.jini.core.transaction.TransactionFactory;
 import net.jini.core.transaction.server.TransactionManager;
@@ -7,7 +9,6 @@ import net.jini.space.JavaSpace;
 import net.jini.space.JavaSpace05;
 import security.SpaceUtils;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 
 public class LotManager {
@@ -25,7 +26,7 @@ public class LotManager {
             System.exit(1);
         }
 
-        // Find the transaction manager on the network
+        // Transaction manager initialisation
         mgr = SpaceUtils.getManager();
         if (mgr == null) {
             System.err.println("Failed to find the transaction manager");
@@ -73,11 +74,14 @@ public class LotManager {
      * @param lot Lot object representing the lot the bid is being placed on
      * @return returns Lot object representing the updated selected Lot
      */
-    public Lot makeBid(User user, Float bidPrice, Lot lot) {
+    public Lot makeBid(User user, Float bidPrice, Lot lot, RemoteEventListener listener) {
         Lot template = lot;
+        Bid newBid = new Bid(user, bidPrice);
         try {
+            // add the listener
+            space.notify(newBid, null, listener, ONE_MINUTE, null);
             Lot got = (Lot) space.take(template, null, FIVE_SECONDS);
-            got.addBid(new Bid(user, bidPrice));
+            got.addBid(newBid);
             space.write(got, null, ONE_MINUTE);
             return got;
         } catch ( Exception e) {
@@ -95,7 +99,6 @@ public class LotManager {
         Lot template = lot;
         try {
             Lot got = (Lot) space.read(template, null, JavaSpace.NO_WAIT);
-            System.out.println(got);
             return got.bids;
         } catch ( Exception e) {
             e.printStackTrace();
@@ -122,7 +125,7 @@ public class LotManager {
     /**
      * Removes Lot object from the JavaSpace
      */
-    public void removeLot() {
+    public void removeLot(Lot lot) {
 
     }
 }

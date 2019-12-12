@@ -1,11 +1,20 @@
 import datatypes.*;
+import net.jini.core.event.RemoteEvent;
+import net.jini.core.event.RemoteEventListener;
+import net.jini.core.event.UnknownEventException;
+import net.jini.export.Exporter;
+import net.jini.jeri.BasicILFactory;
+import net.jini.jeri.BasicJeriExporter;
+import net.jini.jeri.tcp.TcpServerEndpoint;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.rmi.Remote;
+import java.rmi.RemoteException;
 import java.util.ArrayList;
 
-public class ViewLotUI extends AuctionUI {
+public class ViewLotUI extends AuctionUI implements RemoteEventListener {
 
     private JPanel viewLotScreen;
     private JLabel lotNameLabel;
@@ -16,7 +25,7 @@ public class ViewLotUI extends AuctionUI {
     private JButton buyItNowButton;
     private JButton makeBidButton;
 
-    public Lot selectedLot;
+    private Lot selectedLot;
 
     public ViewLotUI(Lot selectedLot) {
         // Variable initialisation
@@ -37,14 +46,13 @@ public class ViewLotUI extends AuctionUI {
                 String input = JOptionPane.showInputDialog(AuctionSystem.getAuctionSystem(),
                         "Enter bid amount", null);
                 float bidAmount = Float.parseFloat(input);
-                Lot updatedLot = lotManager.makeBid(AuctionSystem.getAuctionSystem().getUserSession(), bidAmount, selectedLot);
-                refreshLot(updatedLot);
+                Lot updatedLot = lotManager.makeBid(AuctionSystem.getAuctionSystem().getUserSession(), bidAmount, getSelectedLot(), getEventListener());
+                setSelectedLot(updatedLot);
                 refreshBids();
             }
         });
 
-        buyItNowButton.addActionListener(
-                new ActionListener() {
+        buyItNowButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
 
@@ -63,9 +71,15 @@ public class ViewLotUI extends AuctionUI {
      * Updates the selected lot object to ensure it is synchronised its JavaSpace equivalent
      * @param updatedLot updated Lot object to overwrite the selected Lot object
      */
-    public void refreshLot(Lot updatedLot) {
+    public void setSelectedLot(Lot updatedLot) {
         this.selectedLot = updatedLot;
     }
+
+    /**
+     * Gets the Lot currently selected, displayed on the ViewLotUI
+     * @return Lot object representing the currently selected lot
+     */
+    public Lot getSelectedLot() { return this.selectedLot; }
 
     /**
      * Refreshes the list of Bid objects for a given Lot
@@ -77,6 +91,35 @@ public class ViewLotUI extends AuctionUI {
         ArrayList<Bid> bids = lotManager.getBids(selectedLot);
         for (Bid ele : bids) {
             model.addElement(ele);
+        }
+    }
+
+    /**
+     * Listens for changes in bids to the given Lot object and refreshes the bid list accordingly
+     * @param remoteEvent
+     * @throws UnknownEventException
+     * @throws RemoteException
+     */
+    @Override
+    public void notify(RemoteEvent remoteEvent) throws UnknownEventException, RemoteException {
+        System.out.println("bid updated");
+        refreshBids();
+    }
+
+    public RemoteEventListener getEventListener() {
+        // create the exporter
+        Exporter myDefaultExporter =
+                new BasicJeriExporter(TcpServerEndpoint.getInstance(0),
+                        new BasicILFactory(), false, true);
+
+        try {
+            // register this as a remote object
+            // and get a reference to the 'stub'
+            return (RemoteEventListener) myDefaultExporter.export(this);
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.exit(1);
+            return null;
         }
     }
 }
