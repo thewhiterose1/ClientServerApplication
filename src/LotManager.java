@@ -68,6 +68,10 @@ public class LotManager {
 
     /**
      * Makes a bid on a Lot object
+     * @param user User object representing the buyer making the bid
+     * @param bidPrice Float value representing the price the buyer is offering
+     * @param lot Lot object representing the lot the bid is being placed on
+     * @return returns Lot object representing the updated selected Lot
      */
     public Lot makeBid(User user, Float bidPrice, Lot lot) {
         Lot template = lot;
@@ -101,6 +105,10 @@ public class LotManager {
 
     /**
      * Writes new Lot object to the JavaSpace
+     * @param seller User object representing the seller of the lot
+     * @param lotName String value representing the name of the lot
+     * @param lotDesc String value representing the description of the lot
+     * @param lotBuyNow Float value representing the seller's buy now price
      */
     public void newLot(User seller, String lotName, String lotDesc, float lotBuyNow) {
         try {
