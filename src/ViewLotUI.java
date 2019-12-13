@@ -1,20 +1,15 @@
-import datatypes.*;
+import datatypes.Bid;
+import datatypes.Lot;
 import net.jini.core.event.RemoteEvent;
-import net.jini.core.event.RemoteEventListener;
 import net.jini.core.event.UnknownEventException;
-import net.jini.export.Exporter;
-import net.jini.jeri.BasicILFactory;
-import net.jini.jeri.BasicJeriExporter;
-import net.jini.jeri.tcp.TcpServerEndpoint;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 
-public class ViewLotUI extends AuctionUI implements RemoteEventListener {
+public class ViewLotUI extends AuctionUI {
 
     private JPanel viewLotScreen;
     private JLabel lotNameLabel;
@@ -30,7 +25,6 @@ public class ViewLotUI extends AuctionUI implements RemoteEventListener {
     public ViewLotUI(Lot selectedLot) {
         // Variable initialisation
         this.interfacePanel = viewLotScreen;
-        this.lotManager = new LotManager();
         this.selectedLot = selectedLot;
         refreshBids();
 
@@ -46,16 +40,15 @@ public class ViewLotUI extends AuctionUI implements RemoteEventListener {
                 String input = JOptionPane.showInputDialog(AuctionSystem.getAuctionSystem(),
                         "Enter bid amount", null);
                 float bidAmount = Float.parseFloat(input);
-                Lot updatedLot = lotManager.makeBid(AuctionSystem.getAuctionSystem().getUserSession(), bidAmount, getSelectedLot(), getEventListener());
+                Lot updatedLot = lotManager.makeBid(AuctionSystem.getAuctionSystem().getUserSession(), bidAmount, getSelectedLot());
                 setSelectedLot(updatedLot);
-                refreshBids();
             }
         });
 
         buyItNowButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-
+                lotManager.removeLot(getSelectedLot());
             }
         });
 
@@ -102,24 +95,6 @@ public class ViewLotUI extends AuctionUI implements RemoteEventListener {
      */
     @Override
     public void notify(RemoteEvent remoteEvent) throws UnknownEventException, RemoteException {
-        System.out.println("bid updated");
         refreshBids();
-    }
-
-    public RemoteEventListener getEventListener() {
-        // create the exporter
-        Exporter myDefaultExporter =
-                new BasicJeriExporter(TcpServerEndpoint.getInstance(0),
-                        new BasicILFactory(), false, true);
-
-        try {
-            // register this as a remote object
-            // and get a reference to the 'stub'
-            return (RemoteEventListener) myDefaultExporter.export(this);
-        } catch (Exception e) {
-            e.printStackTrace();
-            System.exit(1);
-            return null;
-        }
     }
 }

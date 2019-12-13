@@ -1,17 +1,23 @@
+import net.jini.core.event.RemoteEvent;
+import net.jini.core.event.RemoteEventListener;
+import net.jini.core.event.UnknownEventException;
+import net.jini.core.transaction.TransactionException;
+
 import javax.swing.*;
+import java.rmi.RemoteException;
 
 /**
  * Super class for all screens within system
  * Implements functionality common to all user interfaces
  */
-public class AuctionUI {
+public class AuctionUI implements RemoteEventListener {
 
     protected JPanel interfacePanel;
     protected AuctionSystem auctionSystem;
     protected LotManager lotManager;
 
     public AuctionUI() {
-        lotManager = new LotManager();
+        lotManager = new LotManager(this);
     }
 
     /**
@@ -27,5 +33,16 @@ public class AuctionUI {
      */
     protected void setAuctionSystem() {
         this.auctionSystem = AuctionSystem.getAuctionSystem();
+    }
+
+    /**
+     *
+     * @param remoteEvent
+     * @throws UnknownEventException
+     * @throws RemoteException
+     */
+    @Override
+    public void notify(RemoteEvent remoteEvent) throws UnknownEventException, RemoteException {
+
     }
 }
