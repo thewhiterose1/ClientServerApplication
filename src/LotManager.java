@@ -1,5 +1,6 @@
 import datatypes.Bid;
 import datatypes.Lot;
+import datatypes.RefreshLot;
 import datatypes.User;
 import net.jini.core.event.RemoteEventListener;
 import net.jini.core.transaction.Transaction;
@@ -44,6 +45,7 @@ public class LotManager {
         // Setup of notify functionality - gives live updates of all relevant objects to interfaces
         try {
             space.notify(new Lot(), null, getEventListener(interfaceObj), COMMIT_TIME, null);
+            space.notify(new RefreshLot(), null, getEventListener(interfaceObj), COMMIT_TIME, null);
         }
         catch(Exception e) {
 
@@ -154,6 +156,7 @@ public class LotManager {
      */
     public void removeLot(Lot lot)  {
         try {
+            space.write(new RefreshLot(), null, COMMIT_TIME);
             space.take(lot, null, COMMIT_TIME);
         } catch (Exception e) {
             e.printStackTrace();

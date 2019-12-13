@@ -49,6 +49,7 @@ public class ViewLotUI extends AuctionUI {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 lotManager.removeLot(getSelectedLot());
+                AuctionSystem.getAuctionSystem().changePanel("AuctionHub");
             }
         });
 
