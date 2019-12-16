@@ -1,12 +1,10 @@
 import datatypes.Bid;
 import datatypes.Lot;
 import net.jini.core.event.RemoteEvent;
-import net.jini.core.event.UnknownEventException;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.rmi.RemoteException;
 import java.util.ArrayList;
 
 public class ViewLotUI extends AuctionUI {
@@ -19,6 +17,9 @@ public class ViewLotUI extends AuctionUI {
     private JButton backButton;
     private JButton buyItNowButton;
     private JButton makeBidButton;
+    private JButton acceptBidButton;
+    private JButton rmvLotButton;
+    private JPanel lotOptions;
 
     private Lot selectedLot;
 
@@ -27,6 +28,7 @@ public class ViewLotUI extends AuctionUI {
         this.interfacePanel = viewLotScreen;
         this.selectedLot = selectedLot;
         refreshBids();
+        initialState();
 
         // Lot information initialisation
         lotNameLabel.setText("Name: " + selectedLot.name);
@@ -56,6 +58,21 @@ public class ViewLotUI extends AuctionUI {
         backButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
+                AuctionSystem.getAuctionSystem().changePanel("AuctionHub");
+            }
+        });
+
+        acceptBidButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                lotManager.removeLot(getSelectedLot());
+            }
+        });
+
+        rmvLotButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                lotManager.removeLot(getSelectedLot());
                 AuctionSystem.getAuctionSystem().changePanel("AuctionHub");
             }
         });
@@ -89,13 +106,26 @@ public class ViewLotUI extends AuctionUI {
     }
 
     /**
+     * Initial state of the interface
+     * Determines which elements should be displayed if the user owns the lot being viewed or not
+     */
+    public void initialState() {
+        if (this.selectedLot.seller == (AuctionSystem.getAuctionSystem().getUserSession())) {
+            buyItNowButton.setVisible(false);
+            makeBidButton.setVisible(false);
+        }
+        else {
+            rmvLotButton.setVisible(false);
+            acceptBidButton.setVisible(false);
+        }
+    }
+
+    /**
      * Listens for changes in bids to the given Lot object and refreshes the bid list accordingly
      * @param remoteEvent
-     * @throws UnknownEventException
-     * @throws RemoteException
      */
     @Override
-    public void notify(RemoteEvent remoteEvent) throws UnknownEventException, RemoteException {
+    public void notify(RemoteEvent remoteEvent) {
         refreshBids();
     }
 }

@@ -60,9 +60,7 @@ public class AuctionSystem extends JFrame {
     * Setters
     */
 
-    public void setUserSession(User user) {
-        this.userSession = user;
-    }
+    public void setUserSession(User user) { this.userSession = user; }
 
     /*
     * Getters
