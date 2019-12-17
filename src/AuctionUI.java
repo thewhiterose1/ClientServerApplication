@@ -1,7 +1,6 @@
 import net.jini.core.event.RemoteEvent;
 import net.jini.core.event.RemoteEventListener;
 import net.jini.core.event.UnknownEventException;
-import net.jini.core.transaction.TransactionException;
 
 import javax.swing.*;
 import java.rmi.RemoteException;
@@ -42,7 +41,5 @@ public class AuctionUI implements RemoteEventListener {
      * @throws RemoteException
      */
     @Override
-    public void notify(RemoteEvent remoteEvent) throws UnknownEventException, RemoteException {
-
-    }
+    public void notify(RemoteEvent remoteEvent) throws UnknownEventException, RemoteException { }
 }

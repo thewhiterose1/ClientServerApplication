@@ -52,9 +52,7 @@ public class AuctionSystem extends JFrame {
     }
 
     // Changes the JPanel currently active on the CardLayout
-    public void changePanel(String changeTo) {
-        ((CardLayout) contentDisplay.getLayout()).show(contentDisplay, changeTo);
-    }
+    public void changePanel(String changeTo) { ((CardLayout) contentDisplay.getLayout()).show(contentDisplay, changeTo); }
 
     /*
     * Setters
@@ -66,13 +64,9 @@ public class AuctionSystem extends JFrame {
     * Getters
     */
 
-    public JPanel getContentDisplay() {
-        return this.contentDisplay;
-    }
+    public JPanel getContentDisplay() { return this.contentDisplay; }
 
     public User getUserSession() { return this.userSession; }
 
-    public static AuctionSystem getAuctionSystem() {
-        return app;
-    }
+    public static AuctionSystem getAuctionSystem() { return app; }
 }

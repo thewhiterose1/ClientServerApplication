@@ -55,13 +55,6 @@ public class ViewLotUI extends AuctionUI {
             }
         });
 
-        backButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent actionEvent) {
-                AuctionSystem.getAuctionSystem().changePanel("AuctionHub");
-            }
-        });
-
         acceptBidButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
@@ -73,6 +66,13 @@ public class ViewLotUI extends AuctionUI {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 lotManager.removeLot(getSelectedLot());
+                AuctionSystem.getAuctionSystem().changePanel("AuctionHub");
+            }
+        });
+
+        backButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
                 AuctionSystem.getAuctionSystem().changePanel("AuctionHub");
             }
         });
@@ -110,11 +110,15 @@ public class ViewLotUI extends AuctionUI {
      * Determines which elements should be displayed if the user owns the lot being viewed or not
      */
     public void initialState() {
-        if (this.selectedLot.seller == (AuctionSystem.getAuctionSystem().getUserSession())) {
+        if (this.selectedLot.seller.username.equals(AuctionSystem.getAuctionSystem().getUserSession().username)) {
             buyItNowButton.setVisible(false);
             makeBidButton.setVisible(false);
+            rmvLotButton.setVisible(true);
+            acceptBidButton.setVisible(true);
         }
         else {
+            buyItNowButton.setVisible(true);
+            makeBidButton.setVisible(true);
             rmvLotButton.setVisible(false);
             acceptBidButton.setVisible(false);
         }
