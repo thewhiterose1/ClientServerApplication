@@ -65,7 +65,6 @@ public class AuctionHubUI extends AuctionUI {
 
     @Override
     public void notify(RemoteEvent remoteEvent) {
-        System.out.println("Something changed.");
         refreshList();
     }
 }

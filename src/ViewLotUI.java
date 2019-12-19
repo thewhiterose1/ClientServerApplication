@@ -1,11 +1,13 @@
 import datatypes.Bid;
 import datatypes.Lot;
 import net.jini.core.event.RemoteEvent;
+import net.jini.core.event.UnknownEventException;
 import security.AuctionSecurity;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.rmi.RemoteException;
 import java.util.ArrayList;
 
 public class ViewLotUI extends AuctionUI {

@@ -43,5 +43,6 @@ public class AuctionUI implements RemoteEventListener {
      * @throws RemoteException
      */
     @Override
-    public void notify(RemoteEvent remoteEvent) throws UnknownEventException, RemoteException { }
+    public void notify(RemoteEvent remoteEvent) throws UnknownEventException, RemoteException {
+    }
 }
