@@ -1,6 +1,7 @@
 import datatypes.Bid;
 import datatypes.Lot;
 import net.jini.core.event.RemoteEvent;
+import security.AuctionSecurity;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -41,9 +42,12 @@ public class ViewLotUI extends AuctionUI {
             public void actionPerformed(ActionEvent actionEvent) {
                 String input = JOptionPane.showInputDialog(AuctionSystem.getAuctionSystem(),
                         "Enter bid amount", null);
-                float bidAmount = Float.parseFloat(input);
-                Lot updatedLot = lotManager.makeBid(AuctionSystem.getAuctionSystem().getUserSession(), bidAmount, getSelectedLot());
-                setSelectedLot(updatedLot);
+                // If user input is valid
+                if (AuctionSecurity.validateMoney(input)) {
+                    float bidAmount = Float.parseFloat(input);
+                    Lot updatedLot = lotManager.makeBid(AuctionSystem.getAuctionSystem().getUserSession(), bidAmount, getSelectedLot());
+                    setSelectedLot(updatedLot);
+                }
             }
         });
 

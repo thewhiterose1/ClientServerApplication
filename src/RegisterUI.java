@@ -4,24 +4,26 @@ import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class LoginUI extends AuctionUI {
-    private JPanel loginScreen;
+public class RegisterUI extends AuctionUI{
+    private JPanel registerScreen;
     private JTextField username;
-    private JPasswordField password;
-    private JButton loginButton;
     private JButton backButton;
+    private JButton registerButton;
+    private JPasswordField password;
 
-    public LoginUI() {
+    public RegisterUI() {
         // Variable initialisation
-        this.interfacePanel = loginScreen;
+        this.interfacePanel = registerScreen;
 
-        loginButton.addActionListener(new ActionListener() {
+        // Registration functionality
+        registerButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                login();
+                register();
             }
         });
 
+        // Back to main screen
         backButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
@@ -30,9 +32,9 @@ public class LoginUI extends AuctionUI {
         });
     }
 
-    private void login() {
-        // Query the JavaSpace for the loginButton details
-        User user = accountManager.login(username.getText(), password.getText());
+    public void register() {
+        // Register account then log the user in
+        User user = accountManager.register(username.getText(), password.getText());
         if (user != null) {
             AuctionSystem.getAuctionSystem().setUserSession(user);
             AuctionSystem.getAuctionSystem().changePanel("AuctionHub");

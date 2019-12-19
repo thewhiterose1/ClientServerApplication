@@ -42,12 +42,6 @@
               <text value="Refresh"/>
             </properties>
           </component>
-          <component id="7a166" class="javax.swing.JButton" binding="lotManagerButton">
-            <constraints/>
-            <properties>
-              <text value="Lot Manager"/>
-            </properties>
-          </component>
           <component id="eca01" class="javax.swing.JButton" binding="newLotButton">
             <constraints/>
             <properties>

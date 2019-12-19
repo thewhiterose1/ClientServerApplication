@@ -35,6 +35,6 @@ public class Lot implements Entry {
      * @return string concatenation of Lot information
      */
     public String toString() {
-        return this.name + ". " + this.desc;
+        return "NAME: " + this.name + ". DESC: " + this.desc;
     }
 }

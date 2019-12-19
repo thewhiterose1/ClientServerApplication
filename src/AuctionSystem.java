@@ -3,6 +3,8 @@ import net.jini.core.transaction.TransactionException;
 
 import javax.swing.*;
 import java.awt.CardLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.rmi.RemoteException;
 
 public class AuctionSystem extends JFrame {
@@ -24,6 +26,8 @@ public class AuctionSystem extends JFrame {
 
     private JPanel contentDisplay;
     private JPanel mainScreen;
+    private JButton loginButton;
+    private JButton registerButton;
 
     // Implementation of singleton design pattern for reference to main JFrame across application
     private static AuctionSystem app;
@@ -45,10 +49,24 @@ public class AuctionSystem extends JFrame {
         contentDisplay.add(new LoginUI().getPanel(), "LoginScreen");
         contentDisplay.add(new AuctionHubUI().getPanel(), "AuctionHub" );
         contentDisplay.add(new NewLotUI().getPanel(), "NewLot");
+        contentDisplay.add(new RegisterUI().getPanel(), "RegisterScreen");
 
         // Direct the user to main screen upon application startup
-        changePanel("LoginScreen");
+        changePanel("MainScreen");
 
+        loginButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                changePanel("LoginScreen");
+            }
+        });
+
+        registerButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                changePanel("RegisterScreen");
+            }
+        });
     }
 
     // Changes the JPanel currently active on the CardLayout

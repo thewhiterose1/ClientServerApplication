@@ -20,7 +20,7 @@ public class LotManager {
 
     private JavaSpace05 space;
     private TransactionManager mgr;
-    private final int COMMIT_TIME = 60 * 1000;
+    private final int COMMIT_TIME = 1800 * 1000;
     private final int WAIT_TIME = 5 * 1000;
 
     private AuctionUI interfaceObj;
@@ -45,7 +45,7 @@ public class LotManager {
         // Setup of notify functionality - gives live updates of all relevant objects to interfaces
         try {
             space.notify(new Lot(), null, getEventListener(interfaceObj), COMMIT_TIME, null);
-            space.notify(new RefreshLot(), null, getEventListener(interfaceObj), COMMIT_TIME, null);
+            space.notify(new RefreshLot(), null, getEventListener(interfaceObj), WAIT_TIME, null);
         }
         catch(Exception e) {
 
@@ -156,8 +156,8 @@ public class LotManager {
      */
     public void removeLot(Lot lot)  {
         try {
-            space.write(new RefreshLot(), null, COMMIT_TIME);
             space.take(lot, null, COMMIT_TIME);
+            space.write(new RefreshLot(), null, WAIT_TIME);
         } catch (Exception e) {
             e.printStackTrace();
         }

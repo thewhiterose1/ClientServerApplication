@@ -1,3 +1,5 @@
+import security.AuctionSecurity;
+
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -18,13 +20,18 @@ public class NewLotUI extends AuctionUI {
         createLotButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                lotManager.newLot(
-                        AuctionSystem.getAuctionSystem().getUserSession(),
-                        nameTextField.getText(),
-                        descTextField.getText(),
-                        Float.parseFloat(buyNowTextField.getText())
-                );
-                AuctionSystem.getAuctionSystem().changePanel("AuctionHub");
+                // If user input is valid
+                if (AuctionSecurity.validateMoney(buyNowTextField.getText()) &&
+                        AuctionSecurity.validateText(nameTextField.getText()) &&
+                        AuctionSecurity.validateText(descTextField.getText())) {
+                    lotManager.newLot(
+                            AuctionSystem.getAuctionSystem().getUserSession(),
+                            nameTextField.getText(),
+                            descTextField.getText(),
+                            Float.parseFloat(buyNowTextField.getText())
+                    );
+                    AuctionSystem.getAuctionSystem().changePanel("AuctionHub");
+                }
             }
         });
 

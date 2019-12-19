@@ -31,7 +31,7 @@ public class SpaceUtils {
     }
 
     public static JavaSpace getSpace() {
-        return getSpace("waterloo");
+        return getSpace("localhost");
     }
 
 
@@ -58,7 +58,7 @@ public class SpaceUtils {
     }
 
     public static TransactionManager getManager() {
-        return getManager("waterloo");
+        return getManager("localhost");
     }
 }
 

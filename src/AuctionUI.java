@@ -14,9 +14,11 @@ public class AuctionUI implements RemoteEventListener {
     protected JPanel interfacePanel;
     protected AuctionSystem auctionSystem;
     protected LotManager lotManager;
+    protected AccountManager accountManager;
 
     public AuctionUI() {
         lotManager = new LotManager(this);
+        accountManager = new AccountManager(this);
     }
 
     /**

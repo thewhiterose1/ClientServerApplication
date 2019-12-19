@@ -13,7 +13,6 @@ public class AuctionHubUI extends AuctionUI {
     private JPanel hubOptions;
     private JButton newLotButton;
     private JList lotJList;
-    private JButton lotManagerButton;
     private JButton refreshButton;
 
     private ArrayList<Lot> allLots;
@@ -54,7 +53,7 @@ public class AuctionHubUI extends AuctionUI {
     /**
      * By utilising notifications, refresh lots list when new one is added by another user
       */
-    public void refreshList() {
+    private void refreshList() {
         // Populate the JList representing active lots within the system
         DefaultListModel<Lot> model = new DefaultListModel<>();
         lotJList.setModel(model);
@@ -66,6 +65,7 @@ public class AuctionHubUI extends AuctionUI {
 
     @Override
     public void notify(RemoteEvent remoteEvent) {
+        System.out.println("Something changed.");
         refreshList();
     }
 }
