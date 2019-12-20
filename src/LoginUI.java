@@ -1,4 +1,4 @@
-import datatypes.User;
+import datatypes.JJHUser;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -32,9 +32,9 @@ public class LoginUI extends AuctionUI {
 
     private void login() {
         // Query the JavaSpace for the loginButton details
-        User user = accountManager.login(username.getText(), password.getText());
-        if (user != null) {
-            AuctionSystem.getAuctionSystem().setUserSession(user);
+        JJHUser JJHUser = accountManager.login(username.getText(), password.getText());
+        if (JJHUser != null) {
+            AuctionSystem.getAuctionSystem().setJJHUserSession(JJHUser);
             AuctionSystem.getAuctionSystem().changePanel("AuctionHub");
         }
     }

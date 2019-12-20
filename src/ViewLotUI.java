@@ -1,5 +1,5 @@
-import datatypes.Bid;
-import datatypes.Lot;
+import datatypes.JJHBid;
+import datatypes.JJHLot;
 import net.jini.core.event.RemoteEvent;
 import security.AuctionSecurity;
 
@@ -22,19 +22,19 @@ public class ViewLotUI extends AuctionUI {
     private JButton rmvLotButton;
     private JPanel lotOptions;
 
-    private Lot selectedLot;
+    private JJHLot selectedJJHLot;
 
-    public ViewLotUI(Lot selectedLot) {
+    public ViewLotUI(JJHLot selectedJJHLot) {
         // Variable initialisation
         this.interfacePanel = viewLotScreen;
-        this.selectedLot = selectedLot;
+        this.selectedJJHLot = selectedJJHLot;
         refreshBids();
         initialState();
 
         // Lot information initialisation
-        lotNameLabel.setText("Name: " + selectedLot.name);
-        lotDescLabel.setText("Description: " + selectedLot.desc);
-        buyNowPriceLabel.setText("Buy Now Price: " + selectedLot.buyNowPrice);
+        lotNameLabel.setText("Name: " + selectedJJHLot.name);
+        lotDescLabel.setText("Description: " + selectedJJHLot.desc);
+        buyNowPriceLabel.setText("Buy Now Price: " + selectedJJHLot.buyNowPrice);
 
         // Button functionality
         makeBidButton.addActionListener(new ActionListener() {
@@ -45,8 +45,8 @@ public class ViewLotUI extends AuctionUI {
                 // If user input is valid
                 if (AuctionSecurity.validateMoney(input)) {
                     float bidAmount = Float.parseFloat(input);
-                    Lot updatedLot = lotManager.makeBid(AuctionSystem.getAuctionSystem().getUserSession(), bidAmount, getSelectedLot());
-                    setSelectedLot(updatedLot);
+                    JJHLot updatedJJHLot = lotManager.makeBid(AuctionSystem.getAuctionSystem().getJJHUserSession(), bidAmount, getSelectedJJHLot());
+                    setSelectedJJHLot(updatedJJHLot);
                 }
             }
         });
@@ -54,7 +54,7 @@ public class ViewLotUI extends AuctionUI {
         buyItNowButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                lotManager.buyItNow(AuctionSystem.getAuctionSystem().getUserSession(), getSelectedLot());
+                lotManager.buyItNow(AuctionSystem.getAuctionSystem().getJJHUserSession(), getSelectedJJHLot());
                 AuctionSystem.getAuctionSystem().changePanel("AuctionHub");
             }
         });
@@ -62,7 +62,7 @@ public class ViewLotUI extends AuctionUI {
         acceptBidButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                lotManager.acceptHighestBid(getSelectedLot());
+                lotManager.acceptHighestBid(getSelectedJJHLot());
                 AuctionSystem.getAuctionSystem().changePanel("AuctionHub");
             }
         });
@@ -70,7 +70,7 @@ public class ViewLotUI extends AuctionUI {
         rmvLotButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                lotManager.removeLot(getSelectedLot());
+                lotManager.removeLot(getSelectedJJHLot());
                 AuctionSystem.getAuctionSystem().changePanel("AuctionHub");
             }
         });
@@ -85,27 +85,27 @@ public class ViewLotUI extends AuctionUI {
 
     /**
      * Updates the selected lot object to ensure it is synchronised its JavaSpace equivalent
-     * @param updatedLot updated Lot object to overwrite the selected Lot object
+     * @param updatedJJHLot updated Lot object to overwrite the selected Lot object
      */
-    public void setSelectedLot(Lot updatedLot) {
-        this.selectedLot = updatedLot;
+    public void setSelectedJJHLot(JJHLot updatedJJHLot) {
+        this.selectedJJHLot = updatedJJHLot;
     }
 
     /**
      * Gets the Lot currently selected, displayed on the ViewLotUI
      * @return Lot object representing the currently selected lot
      */
-    public Lot getSelectedLot() { return this.selectedLot; }
+    public JJHLot getSelectedJJHLot() { return this.selectedJJHLot; }
 
     /**
      * Refreshes the list of Bid objects for a given Lot
      */
     public void refreshBids() {
         // Populate the JList representing active bids for a given lot
-        DefaultListModel<Bid> model = new DefaultListModel<>();
+        DefaultListModel<JJHBid> model = new DefaultListModel<>();
         bidJList.setModel(model);
-        ArrayList<Bid> bids = lotManager.getBids(selectedLot);
-        for (Bid ele : bids) {
+        ArrayList<JJHBid> JJHBids = lotManager.getBids(selectedJJHLot);
+        for (JJHBid ele : JJHBids) {
             model.addElement(ele);
         }
     }
@@ -115,11 +115,11 @@ public class ViewLotUI extends AuctionUI {
      * Determines which elements should be displayed if the user owns the lot being viewed or not
      */
     public void initialState() {
-        if (this.selectedLot.seller.username.equals(AuctionSystem.getAuctionSystem().getUserSession().username)) {
+        if (this.selectedJJHLot.seller.username.equals(AuctionSystem.getAuctionSystem().getJJHUserSession().username)) {
             buyItNowButton.setVisible(false);
             makeBidButton.setVisible(false);
             rmvLotButton.setVisible(true);
-            if (selectedLot.bids.size() > 0) {
+            if (selectedJJHLot.JJHBids.size() > 0) {
                 acceptBidButton.setVisible(true);
             }
             else {

@@ -1,4 +1,4 @@
-import datatypes.User;
+import datatypes.JJHUser;
 import net.jini.core.transaction.server.TransactionManager;
 import net.jini.space.JavaSpace05;
 import net.jini.space.MatchSet;
@@ -70,13 +70,13 @@ public class AccountManager {
      * @param password password to login with
      * @return true if login successful, false if unsuccessful
      */
-    public User login(String username, String password) {
+    public JJHUser login(String username, String password) {
         // Check the credentials are allowed by regex
         if (!(AuctionSecurity.validateUsername(username) && AuctionSecurity.validatePassword(password))) return null;
         // Hash the attempted password ready for comparison
         String hashedPassword = hashPassword(password);
         // If credentials are correct
-        for (User ele : getAllUsers()) {
+        for (JJHUser ele : getAllUsers()) {
             if (ele.username.equals(username) && ele.password.equals(hashedPassword)) {
                 return ele;
             }
@@ -91,11 +91,11 @@ public class AccountManager {
      * @param password password to be registered
      * @return true if registration successful, false if unsuccessful
      */
-    public User register(String username, String password) {
+    public JJHUser register(String username, String password) {
         // Check the credentials are allowed by regex
         if (!(AuctionSecurity.validateUsername(username) && AuctionSecurity.validatePassword(password))) return null;
         // Check username does not already exist
-        for (User ele : getAllUsers()) {
+        for (JJHUser ele : getAllUsers()) {
             if (ele.username.equals(username)) {
                 JOptionPane.showMessageDialog(null, "ERROR: Username already taken.");
                 return null;
@@ -103,37 +103,37 @@ public class AccountManager {
         }
 
         // Actually register the new user
-        User user = new User(username, hashPassword(password));
+        JJHUser JJHUser = new JJHUser(username, hashPassword(password));
         try {
-            space.write(user, null, COMMIT_TIME);
+            space.write(JJHUser, null, COMMIT_TIME);
         } catch ( Exception e) {
             e.printStackTrace();
             return null;
         }
-        return user;
+        return JJHUser;
     }
 
     /**
      * Gets all User objects to be checked when validating credentials
      * @return ArrayList of all User objects
      */
-    public ArrayList<User> getAllUsers() {
-        ArrayList<User> users = new ArrayList<>();
-        User template = new User();
-        Collection<User> templates = new ArrayList<User>();
+    public ArrayList<JJHUser> getAllUsers() {
+        ArrayList<JJHUser> JJHUsers = new ArrayList<>();
+        JJHUser template = new JJHUser();
+        Collection<JJHUser> templates = new ArrayList<JJHUser>();
         templates.add(template);
 
         try {
             MatchSet results = space.contents(templates, null, WAIT_TIME, 100);
 
-            User result = (User) results.next();
+            JJHUser result = (JJHUser) results.next();
             while (result != null){
-                users.add(result);
-                result = (User) results.next();
+                JJHUsers.add(result);
+                result = (JJHUser) results.next();
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return users;
+        return JJHUsers;
     }
 }

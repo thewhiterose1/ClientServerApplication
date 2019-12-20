@@ -2,16 +2,16 @@ package datatypes;
 
 import net.jini.core.entry.Entry;
 
-public class User implements Entry {
+public class JJHUser implements Entry {
 
     public String username;
     public String password;
 
-    public User() {
+    public JJHUser() {
 
     }
 
-    public User(String username, String password) {
+    public JJHUser(String username, String password) {
         this.username = username;
         this.password = password;
     }

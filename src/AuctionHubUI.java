@@ -1,5 +1,5 @@
-import datatypes.AcceptHighestBidToken;
-import datatypes.Lot;
+import datatypes.JJHAcceptHighestBidToken;
+import datatypes.JJHLot;
 import net.jini.core.event.RemoteEvent;
 
 import javax.swing.*;
@@ -16,7 +16,7 @@ public class AuctionHubUI extends AuctionUI {
     private JList lotJList;
     private JButton refreshButton;
 
-    private ArrayList<Lot> allLots;
+    private ArrayList<JJHLot> allJJHLots;
 
     public AuctionHubUI() {
         // Variable initialisation
@@ -28,7 +28,7 @@ public class AuctionHubUI extends AuctionUI {
             @Override
             public void mouseClicked(MouseEvent e) {
                 super.mouseClicked(e);
-                Lot selected = (Lot) lotJList.getSelectedValue();
+                JJHLot selected = (JJHLot) lotJList.getSelectedValue();
                 AuctionSystem.getAuctionSystem().getContentDisplay().add(new ViewLotUI(selected).getPanel(), "ViewSelectedLot");
                 AuctionSystem.getAuctionSystem().changePanel("ViewSelectedLot");
             }
@@ -56,10 +56,10 @@ public class AuctionHubUI extends AuctionUI {
       */
     private void refreshList() {
         // Populate the JList representing active lots within the system
-        DefaultListModel<Lot> model = new DefaultListModel<>();
+        DefaultListModel<JJHLot> model = new DefaultListModel<>();
         lotJList.setModel(model);
-        allLots = lotManager.getAllLots();
-        for (Lot ele : allLots) {
+        allJJHLots = lotManager.getAllLots();
+        for (JJHLot ele : allJJHLots) {
             model.addElement(ele);
         }
     }
@@ -68,13 +68,13 @@ public class AuctionHubUI extends AuctionUI {
     public void notify(RemoteEvent remoteEvent) {
         refreshList();
         // Buy it now functionality
-        Lot buyItNow = lotManager.buyNowCheck(AuctionSystem.getAuctionSystem().getUserSession());
+        JJHLot buyItNow = lotManager.buyNowCheck(AuctionSystem.getAuctionSystem().getJJHUserSession());
         if (buyItNow != null) {
             JOptionPane.showMessageDialog(null, "Your item: " + buyItNow.name + " was sold!");
         }
-        AcceptHighestBidToken acceptHighestBid = lotManager.checkHighestBid(AuctionSystem.getAuctionSystem().getUserSession());
+        JJHAcceptHighestBidToken acceptHighestBid = lotManager.checkHighestBid(AuctionSystem.getAuctionSystem().getJJHUserSession());
         if (acceptHighestBid != null) {
-            JOptionPane.showMessageDialog(null, "Your bid on item " + acceptHighestBid.lot.name + " was accepted!");
+            JOptionPane.showMessageDialog(null, "Your bid on item " + acceptHighestBid.JJHLot.name + " was accepted!");
         }
     }
 }

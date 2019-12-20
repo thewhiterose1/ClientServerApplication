@@ -25,7 +25,7 @@ public class NewLotUI extends AuctionUI {
                         AuctionSecurity.validateText(nameTextField.getText()) &&
                         AuctionSecurity.validateText(descTextField.getText())) {
                     lotManager.newLot(
-                            AuctionSystem.getAuctionSystem().getUserSession(),
+                            AuctionSystem.getAuctionSystem().getJJHUserSession(),
                             nameTextField.getText(),
                             descTextField.getText(),
                             Float.parseFloat(buyNowTextField.getText())

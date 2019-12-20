@@ -43,10 +43,10 @@ public class LotManager {
 
         // Setup of notify functionality - gives live updates of all relevant objects to interfaces
         try {
-            space.notify(new Lot(), null, getEventListener(interfaceObj), COMMIT_TIME, null);
-            space.notify(new RefreshLot(), null, getEventListener(interfaceObj), COMMIT_TIME, null);
-            space.notify(new BuyNowToken(), null, getEventListener(interfaceObj), COMMIT_TIME, null);
-            space.notify(new AcceptHighestBidToken(), null, getEventListener(interfaceObj), COMMIT_TIME, null);
+            space.notify(new JJHLot(), null, getEventListener(interfaceObj), COMMIT_TIME, null);
+            space.notify(new JJHRefreshLotToken(), null, getEventListener(interfaceObj), COMMIT_TIME, null);
+            space.notify(new JJHBuyNowToken(), null, getEventListener(interfaceObj), COMMIT_TIME, null);
+            space.notify(new JJHAcceptHighestBidToken(), null, getEventListener(interfaceObj), COMMIT_TIME, null);
         }
         catch(Exception e) {
 
@@ -57,37 +57,37 @@ public class LotManager {
      * Returns all Lot objects from the JavaSpace
      * @return ArrayList of all Lot objects in JavaSpace
      */
-    public ArrayList<Lot> getAllLots() {
+    public ArrayList<JJHLot> getAllLots() {
         // List to be returned representing all Lot objects
-        ArrayList<Lot> lotList = new ArrayList<>();
-        Lot template = new Lot();
-        Collection<Lot> templates = new ArrayList<>();
+        ArrayList<JJHLot> JJHLotList = new ArrayList<>();
+        JJHLot template = new JJHLot();
+        Collection<JJHLot> templates = new ArrayList<>();
         templates.add(template);
 
         try {
             MatchSet results = space.contents(templates, null, WAIT_TIME, 100);
 
-            Lot result = (Lot) results.next();
+            JJHLot result = (JJHLot) results.next();
             while (result != null){
-                lotList.add(result);
-                result = (Lot)results.next();
+                JJHLotList.add(result);
+                result = (JJHLot)results.next();
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return lotList;
+        return JJHLotList;
     }
 
     /**
      * Makes a bid on a Lot object
-     * @param user User object representing the buyer making the bid
+     * @param JJHUser User object representing the buyer making the bid
      * @param bidPrice Float value representing the price the buyer is offering
-     * @param lot Lot object representing the lot the bid is being placed on
+     * @param JJHLot Lot object representing the lot the bid is being placed on
      * @return returns Lot object representing the updated selected Lot
      */
-    public Lot makeBid(User user, Float bidPrice, Lot lot) {
-        Lot template = lot;
-        Bid newBid = new Bid(user, bidPrice);
+    public JJHLot makeBid(JJHUser JJHUser, Float bidPrice, JJHLot JJHLot) {
+        JJHLot template = JJHLot;
+        JJHBid newJJHBid = new JJHBid(JJHUser, bidPrice);
         // Transaction utilised to ensure Lot object is not lost since it is taken from the space,
         // in order to update it with a new bid
         Transaction.Created trc = null;
@@ -100,30 +100,30 @@ public class LotManager {
         Transaction txn = trc.transaction;
 
         try {
-            Lot got = (Lot) space.take(template, txn, WAIT_TIME);
-            got.addBid(newBid);
+            JJHLot got = (JJHLot) space.take(template, txn, WAIT_TIME);
+            got.addBid(newJJHBid);
             space.write(got, txn, COMMIT_TIME);
             txn.commit();
             return got;
         } catch ( Exception e) {
             e.printStackTrace();
-            return lot;
+            return JJHLot;
         }
     }
 
     /**
      * Returns all bid objects
-     * @param lot object you are returning the bids of
+     * @param JJHLot object you are returning the bids of
      * @return ArrayList of Bid objects for particular lot
      */
-    public ArrayList<Bid> getBids(Lot lot) {
-        Lot template = lot;
+    public ArrayList<JJHBid> getBids(JJHLot JJHLot) {
+        JJHLot template = JJHLot;
         try {
-            Lot got = (Lot) space.read(template, null, WAIT_TIME);
+            JJHLot got = (JJHLot) space.read(template, null, WAIT_TIME);
             if (got != null) {
-                return got.bids;
+                return got.JJHBids;
             }
-            return new ArrayList<Bid>();
+            return new ArrayList<JJHBid>();
 
         } catch ( Exception e) {
             e.printStackTrace();
@@ -138,10 +138,10 @@ public class LotManager {
      * @param lotDesc String value representing the description of the lot
      * @param lotBuyNow Float value representing the seller's buy now price
      */
-    public void newLot(User seller, String lotName, String lotDesc, float lotBuyNow) {
+    public void newLot(JJHUser seller, String lotName, String lotDesc, float lotBuyNow) {
         try {
-            Lot lot = new Lot(seller, lotName, lotDesc, lotBuyNow);
-            space.write(lot, null, COMMIT_TIME);
+            JJHLot JJHLot = new JJHLot(seller, lotName, lotDesc, lotBuyNow);
+            space.write(JJHLot, null, COMMIT_TIME);
         } catch ( Exception e) {
             e.printStackTrace();
         }
@@ -149,12 +149,12 @@ public class LotManager {
 
     /**
      * Removes Lot object from the JavaSpace
-     * @param lot object user attempting to remove from the JavaSpace
+     * @param JJHLot object user attempting to remove from the JavaSpace
      */
-    public void removeLot(Lot lot)  {
+    public void removeLot(JJHLot JJHLot)  {
         try {
-            space.write(new RefreshLot(), null, WAIT_TIME);
-            space.take(lot, null, COMMIT_TIME);
+            space.write(new JJHRefreshLotToken(), null, WAIT_TIME);
+            space.take(JJHLot, null, COMMIT_TIME);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -163,12 +163,12 @@ public class LotManager {
     /**
      * Invoked when user clicks 'Buy it Now' button in ViewLotUI
      * @param buyer the User object representing the buyer
-     * @param lot the lot object representing the lot being bought
+     * @param JJHLot the lot object representing the lot being bought
      */
-    public void buyItNow(User buyer, Lot lot) {
-        removeLot(lot);
+    public void buyItNow(JJHUser buyer, JJHLot JJHLot) {
+        removeLot(JJHLot);
         try {
-            space.write(new BuyNowToken(buyer, lot), null, WAIT_TIME);
+            space.write(new JJHBuyNowToken(buyer, JJHLot), null, WAIT_TIME);
         }
         catch (Exception e) {
             e.printStackTrace();
@@ -177,16 +177,16 @@ public class LotManager {
 
     /**
      * Called when lot is bought now, checks if user owned bought lot
-     * @param user User object to check if owner of lot
+     * @param JJHUser User object to check if owner of lot
      * @return Lot object, or null, depending if the user owned the lot
      */
-    public Lot buyNowCheck(User user) {
-        BuyNowToken template = new BuyNowToken();
+    public JJHLot buyNowCheck(JJHUser JJHUser) {
+        JJHBuyNowToken template = new JJHBuyNowToken();
         try {
-            BuyNowToken got = (BuyNowToken) space.read(template, null, WAIT_TIME);
-            if (got.boughtLot.seller.username.equals(user.username)) {
+            JJHBuyNowToken got = (JJHBuyNowToken) space.read(template, null, WAIT_TIME);
+            if (got.boughtJJHLot.seller.username.equals(JJHUser.username)) {
                 space.take(got, null, WAIT_TIME);
-                return got.boughtLot;
+                return got.boughtJJHLot;
             }
             return null;
         }
@@ -197,23 +197,23 @@ public class LotManager {
 
     /**
      * Functionality for accepting the highest bid and removing the lot
-     * @param lot lot object that the highest bid is being accepted on
+     * @param JJHLot lot object that the highest bid is being accepted on
      */
-    public void acceptHighestBid(Lot lot) {
+    public void acceptHighestBid(JJHLot JJHLot) {
         try {
-            if (lot.bids.size() > 0) {
-                Lot got = (Lot) space.take(lot, null, WAIT_TIME);
-                Bid highest = got.bids.get(0);
-                for (Bid ele : got.bids) {
+            if (JJHLot.JJHBids.size() > 0) {
+                JJHLot got = (JJHLot) space.take(JJHLot, null, WAIT_TIME);
+                JJHBid highest = got.JJHBids.get(0);
+                for (JJHBid ele : got.JJHBids) {
                     if (ele.bidPrice < highest.bidPrice) {
-                        got.bids.remove(ele);
+                        got.JJHBids.remove(ele);
                         highest = ele;
                     }
                     else {
                         highest = ele;
                     }
                 }
-                space.write(new AcceptHighestBidToken(lot, highest), null, WAIT_TIME);
+                space.write(new JJHAcceptHighestBidToken(JJHLot, highest), null, WAIT_TIME);
             }
         }
         catch (Exception e) {
@@ -223,15 +223,15 @@ public class LotManager {
 
     /**
      * Checks if the user of the system had their bid accepted
-     * @param user the user of the system
+     * @param JJHUser the user of the system
      * @return Returns the token object containing bid and lot information
      */
-    public AcceptHighestBidToken checkHighestBid(User user) {
-        AcceptHighestBidToken template = new AcceptHighestBidToken();
+    public JJHAcceptHighestBidToken checkHighestBid(JJHUser JJHUser) {
+        JJHAcceptHighestBidToken template = new JJHAcceptHighestBidToken();
         try {
-            AcceptHighestBidToken got = (AcceptHighestBidToken) space.take(template, null, WAIT_TIME);
+            JJHAcceptHighestBidToken got = (JJHAcceptHighestBidToken) space.take(template, null, WAIT_TIME);
             if (got != null) {
-                if (user.username.equals(got.highestBid.user.username)) {
+                if (JJHUser.username.equals(got.highestJJHBid.JJHUser.username)) {
                     return got;
                 }
             }

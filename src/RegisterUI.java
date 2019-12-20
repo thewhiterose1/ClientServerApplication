@@ -1,4 +1,4 @@
-import datatypes.User;
+import datatypes.JJHUser;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -34,9 +34,9 @@ public class RegisterUI extends AuctionUI{
 
     public void register() {
         // Register account then log the user in
-        User user = accountManager.register(username.getText(), password.getText());
-        if (user != null) {
-            AuctionSystem.getAuctionSystem().setUserSession(user);
+        JJHUser JJHUser = accountManager.register(username.getText(), password.getText());
+        if (JJHUser != null) {
+            AuctionSystem.getAuctionSystem().setJJHUserSession(JJHUser);
             AuctionSystem.getAuctionSystem().changePanel("AuctionHub");
         }
     }

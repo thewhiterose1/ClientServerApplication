@@ -22,7 +22,7 @@ public class AuctionSystem extends JFrame {
         }
     }
 
-    private User userSession;
+    private JJHUser JJHUserSession;
 
     private JPanel contentDisplay;
     private JPanel mainScreen;
@@ -76,7 +76,7 @@ public class AuctionSystem extends JFrame {
     * Setters
     */
 
-    public void setUserSession(User user) { this.userSession = user; }
+    public void setJJHUserSession(JJHUser JJHUser) { this.JJHUserSession = JJHUser; }
 
     /*
     * Getters
@@ -84,7 +84,7 @@ public class AuctionSystem extends JFrame {
 
     public JPanel getContentDisplay() { return this.contentDisplay; }
 
-    public User getUserSession() { return this.userSession; }
+    public JJHUser getJJHUserSession() { return this.JJHUserSession; }
 
     public static AuctionSystem getAuctionSystem() { return app; }
 }
