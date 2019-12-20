@@ -1,9 +1,7 @@
 import datatypes.User;
-import net.jini.core.transaction.Transaction;
-import net.jini.core.transaction.TransactionFactory;
 import net.jini.core.transaction.server.TransactionManager;
-import net.jini.space.JavaSpace;
 import net.jini.space.JavaSpace05;
+import net.jini.space.MatchSet;
 import security.AuctionSecurity;
 import security.SpaceUtils;
 
@@ -11,6 +9,7 @@ import javax.swing.*;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
+import java.util.Collection;
 
 public class AccountManager {
 
@@ -49,7 +48,7 @@ public class AccountManager {
         StringBuilder hash = new StringBuilder();
 
         try {
-            MessageDigest sha = MessageDigest.getInstance("SHA-1");
+            MessageDigest sha = MessageDigest.getInstance("SHA-256");
             byte[] hashedBytes = sha.digest(password.getBytes());
             char[] digits = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
                     'a', 'b', 'c', 'd', 'e', 'f' };
@@ -121,25 +120,18 @@ public class AccountManager {
     public ArrayList<User> getAllUsers() {
         ArrayList<User> users = new ArrayList<>();
         User template = new User();
+        Collection<User> templates = new ArrayList<User>();
+        templates.add(template);
 
         try {
-            // Creation of transaction object
-            Transaction.Created trc = null;
-            try {
-                trc = TransactionFactory.create(mgr, WAIT_TIME);
-            } catch (Exception e) {
-                System.out.println("Could not create transaction " + e);
-            }
+            MatchSet results = space.contents(templates, null, WAIT_TIME, 100);
 
-            Transaction txn = trc.transaction;
-
-            while (space.read(template, null, JavaSpace.NO_WAIT) != null) {
-                User got = (User) space.take(template, txn, WAIT_TIME);
-                users.add(got);
+            User result = (User) results.next();
+            while (result != null){
+                users.add(result);
+                result = (User) results.next();
             }
-            txn.abort();
-        }
-        catch ( Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return users;

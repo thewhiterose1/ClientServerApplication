@@ -1,3 +1,4 @@
+import datatypes.AcceptHighestBidToken;
 import datatypes.Lot;
 import net.jini.core.event.RemoteEvent;
 
@@ -66,5 +67,14 @@ public class AuctionHubUI extends AuctionUI {
     @Override
     public void notify(RemoteEvent remoteEvent) {
         refreshList();
+        // Buy it now functionality
+        Lot buyItNow = lotManager.buyNowCheck(AuctionSystem.getAuctionSystem().getUserSession());
+        if (buyItNow != null) {
+            JOptionPane.showMessageDialog(null, "Your item: " + buyItNow.name + " was sold!");
+        }
+        AcceptHighestBidToken acceptHighestBid = lotManager.checkHighestBid(AuctionSystem.getAuctionSystem().getUserSession());
+        if (acceptHighestBid != null) {
+            JOptionPane.showMessageDialog(null, "Your bid on item " + acceptHighestBid.lot.name + " was accepted!");
+        }
     }
 }

@@ -1,13 +1,11 @@
 import datatypes.Bid;
 import datatypes.Lot;
 import net.jini.core.event.RemoteEvent;
-import net.jini.core.event.UnknownEventException;
 import security.AuctionSecurity;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.rmi.RemoteException;
 import java.util.ArrayList;
 
 public class ViewLotUI extends AuctionUI {
@@ -56,7 +54,7 @@ public class ViewLotUI extends AuctionUI {
         buyItNowButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                lotManager.removeLot(getSelectedLot());
+                lotManager.buyItNow(AuctionSystem.getAuctionSystem().getUserSession(), getSelectedLot());
                 AuctionSystem.getAuctionSystem().changePanel("AuctionHub");
             }
         });
@@ -64,7 +62,8 @@ public class ViewLotUI extends AuctionUI {
         acceptBidButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                lotManager.removeLot(getSelectedLot());
+                lotManager.acceptHighestBid(getSelectedLot());
+                AuctionSystem.getAuctionSystem().changePanel("AuctionHub");
             }
         });
 
@@ -120,7 +119,12 @@ public class ViewLotUI extends AuctionUI {
             buyItNowButton.setVisible(false);
             makeBidButton.setVisible(false);
             rmvLotButton.setVisible(true);
-            acceptBidButton.setVisible(true);
+            if (selectedLot.bids.size() > 0) {
+                acceptBidButton.setVisible(true);
+            }
+            else {
+                acceptBidButton.setVisible(false);
+            }
         }
         else {
             buyItNowButton.setVisible(true);

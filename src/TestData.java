@@ -14,7 +14,7 @@ public class TestData {
     public ArrayList<Lot> lots = new ArrayList<>();
 
     private JavaSpace space;
-    private int ONE_MINUTE = 60 * 1000;
+    private int ONE_MINUTE = 180 * 1000;
 
 
     public TestData() throws RemoteException, TransactionException {
@@ -29,8 +29,6 @@ public class TestData {
         // Users
         user1 = new User("user1", "password");
         user2 = new User("user2", "password");
-        //space.write(user1, null, ONE_MINUTE);
-        //space.write(user2, null, ONE_MINUTE);
 
         // Lots
         lots.add(new Lot(user1, "Lot 1", "Description for lot 1 item.", 10f));
